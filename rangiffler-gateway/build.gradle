@@ -1,0 +1,52 @@
+plugins {
+    id 'org.springframework.boot' version '3.5.5'
+    id 'com.google.cloud.tools.jib' version '3.4.1'
+}
+
+group = 'guru.qa'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.grpc:spring-grpc-dependencies:${project.ext.springGrpcVersion}"
+    }
+}
+
+dependencies {
+    implementation project(':rangiffler-grpc-common')
+    
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    implementation 'org.springframework.data:spring-data-commons'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-graphql'
+    implementation "com.tailrocks.graphql:graphql-datetime-spring-boot-starter:${project.ext.springGraphqlDateTimeVersion}"
+
+    implementation 'org.springframework.grpc:spring-grpc-spring-boot-starter'
+    implementation 'io.grpc:grpc-services'
+
+    annotationProcessor "org.projectlombok:lombok:${project.ext.lombokVersion}"
+    compileOnly "org.projectlombok:lombok:${project.ext.lombokVersion}"
+
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${project.ext.springOpenApiVersion}"
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+
+tasks.register('printVersion') {
+    doLast {
+        println project.version
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
