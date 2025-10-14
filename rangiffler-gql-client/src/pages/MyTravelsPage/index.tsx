@@ -81,6 +81,7 @@ export const MyTravelsPage = () => {
                             marginLeft: "auto",
                         }}
                         onClick={handleAddClick}
+                        aria-label="Add photo"
                     >
                         Add photo
                     </Button>

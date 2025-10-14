@@ -28,10 +28,20 @@ type UpdateFriendshipReturnType = {
     updateFriendship: (updateUserInput: FriendshipInput) => void,
     loading: boolean,
 }
-export const useUpdateFriendshipStatus = (req: UpdateFriendshipRequestType): UpdateFriendshipReturnType => {
-    const [updateFriendship, {loading}] = useMutation(FRIENDSHIP_ACTION, {
-        onError: req.onError,
-        onCompleted: req.onCompleted,
-    });
-    return {updateFriendship, loading};
+export const useUpdateFriendshipStatus = (
+  req: UpdateFriendshipRequestType = {}
+): UpdateFriendshipReturnType => {
+  const [updateFriendship, { loading }] = useMutation(FRIENDSHIP_ACTION, {
+    onError: req.onError,
+    onCompleted: req.onCompleted,
+    refetchQueries: [
+      "GetOutcomeInvitations",
+      "GetFriends",
+      "GetPeople",
+      "GetInvitations"
+    ],
+    awaitRefetchQueries: true,
+  });
+
+  return { updateFriendship, loading };
 };
