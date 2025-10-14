@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package guru.qa.grpc.rangiffler;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+option java_multiple_files = true;
+option java_package = "guru.qa.rangiffler";
+option java_outer_classname = "UserDataProto";
+
+service UserDataService {
+  rpc GetUserById(UserIdRequest) returns (UserResponse);
+  rpc GetUserByUsername(UsernameRequest) returns (UserResponse);
+  rpc UpdateUser(UpdateUserRequest) returns (UserResponse);
+}
+
+service FriendshipService {
+  rpc GetUsers(ListUsersRequest) returns (ListUsersResponse);
+  rpc UpdateFriendship(UpdateFriendshipRequest) returns (UpdateFriendshipResponse);
+}
+
+message UserIdRequest {
+  string user_id = 1;
+}
+
+message UsernameRequest {
+  string username = 1;
+}
+
+message CreateUserRequest {
+  string username = 1;
+  string firstname = 2;
+  string surname = 3;
+  string avatar = 4;
+  string country_code = 5;
+}
+
+message UpdateUserRequest {
+  string id = 1;
+  optional string firstname = 2;
+  optional string surname = 3;
+  string avatar = 4;
+  string country_code = 5;
+}
+
+message UserResponse {
+  string id = 1;
+  string username = 2;
+  string firstname = 3;
+  string surname = 4;
+  string avatar = 5;
+  string country_code = 6;
+  FriendshipStatus status = 7;
+}
+
+message ListUsersRequest {
+  string requester_name = 1;
+  FriendshipStatus status = 2;
+  int32 page = 3;
+  int32 size = 4;
+  string search_query = 5;
+}
+
+message ListUsersResponse {
+  repeated UserResponse users = 1;
+  int32 page = 2;
+  int32 size = 3;
+  int32 total = 4;
+}
+
+message UpdateFriendshipRequest {
+  string requester_name = 1;
+  string addressee_name = 2;
+  FriendAction action = 3;
+}
+
+message UpdateFriendshipResponse {
+  string addressee_name = 1;
+  FriendshipStatus status = 2;
+  google.protobuf.Timestamp created_date = 4;
+}
+
+enum FriendshipStatus {
+  NONE = 0;
+  SENT_PENDING = 1;
+  RECEIVED_PENDING = 2;
+  FRIEND = 3;
+}
+
+enum FriendAction {
+  ADD = 0;
+  ACCEPT = 1;
+  REJECT = 2;
+  DELETE = 3;
+}

@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+package guru.qa.grpc.rangiffler;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+option java_multiple_files = true;
+option java_package = "guru.qa.rangiffler";
+option java_outer_classname = "PhotoProto";
+
+service PhotoService {
+  rpc AddPhoto(PhotoRequest) returns (PhotoResponse);
+  rpc UpdatePhoto(UpdatePhotoRequest) returns (PhotoResponse);
+  rpc DeletePhoto(DeletePhotoRequest) returns (DeletePhotoResponse);
+  rpc LikePhoto(LikePhotoRequest) returns (PhotoResponse);
+
+  rpc GetUsersPhotos(UsersPhotoRequest) returns (PhotoListResponse);
+  rpc GetUsersStatistics(UsersStatRequest) returns (StatsResponse);
+}
+
+message PhotoRequest {
+  string user_id = 1;
+  string country_code = 2;
+  optional string description = 3;
+  string photo = 4;
+}
+
+message UpdatePhotoRequest {
+  string id = 1;
+  string country_code = 2;
+  optional string description = 3;
+  string photo = 4;
+}
+
+message LikePhotoRequest {
+  string photo_id = 1;
+  string user_id = 2;
+  google.protobuf.Timestamp created_date = 3;
+}
+
+message PhotoResponse {
+  string id = 1;
+  string user_id = 2;
+  string country_code = 3;
+  string description = 4;
+  string photo = 5;
+  google.protobuf.Timestamp created_date = 6;
+  repeated string liked_user_ids = 7;
+}
+
+message DeletePhotoRequest {
+  string id = 1;
+}
+
+message DeletePhotoResponse {
+  bool success = 1;
+}
+
+message UsersPhotoRequest {
+  repeated string user_ids = 1;
+  int32 page = 2;
+  int32 size = 3;
+}
+
+message PhotoListResponse {
+  repeated PhotoResponse photos = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 size = 4;
+}
+
+message UsersStatRequest {
+  repeated string user_ids = 1;
+}
+
+message StatsResponse {
+  repeated StatResponse stats = 1;
+}
+
+message StatResponse {
+  string country_code = 1;
+  int32 count = 2;
+}
