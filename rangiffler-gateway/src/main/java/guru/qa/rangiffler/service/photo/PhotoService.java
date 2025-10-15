@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
@@ -51,52 +52,44 @@ public class PhotoService {
   }
 
   public @Nonnull PhotoGql savePhoto(@Nonnull Jwt principal, @Nonnull PhotoInput input) {
-    final String username = principal.getClaim("sub");
-    final UUID userId = userService.getUserId(username);
+    UUID userId = userService.getUserId(principal.getClaim("sub"));
 
-    final String photoIdStr = input.id();
-    final boolean isLikeAction = input.like() != null && input.like().user() != null;
-
-    PhotoResponse photoResponse;
-
-    if (isLikeAction) {
-      if (photoIdStr == null) {
-        throw new IllegalArgumentException("Photo ID must be provided for like action");
-      }
-      final UUID photoId = UUID.fromString(photoIdStr);
-      if (isOwner(userId, photoId)) {
-        log.warn("User '{}' ({}) tried to like own photo '{}'", username, userId, photoId);
-        throw new SecurityException("You don't have permission to like this photo");
-      }
-      log.info("User '{}' ({}) likes photo '{}'", username, userId, photoId);
-      photoResponse = photoClient.likePhoto(userId, photoId);
-
-    } else if (photoIdStr != null) {
-      final UUID photoId = UUID.fromString(photoIdStr);
-      if (!isOwner(userId, photoId)) {
-        log.warn("User '{}' ({}) tried to edit someone else's photo '{}'", username, userId, photoId);
-        throw new SecurityException("You don't have permission to modify this photo");
-      }
-
-      log.info("User '{}' ({}) updates photo '{}'", username, userId, photoIdStr);
-      photoResponse = photoClient.updatePhoto(input);
-
-    } else {
-      log.info("User '{}' ({}) adds new photo", username, userId);
-      photoResponse = photoClient.addPhoto(userId, input);
+    if (input.id() == null) {
+      log.info("Adding new photo for user {}", userId);
+      PhotoResponse photoResponse = photoClient.addPhoto(userId, input);
+      return mapper.fromPhotoResponse(photoResponse, countryService.getCountryByCode(photoResponse.getCountryCode()));
     }
 
-    final var country = countryService.getCountryByCode(photoResponse.getCountryCode());
-    return mapper.fromPhotoResponse(photoResponse, country);
+    UUID photoId = UUID.fromString(input.id());
+    boolean hasLikeAction = input.like() != null && input.like().user() != null;
+
+    if (hasLikeAction) {
+      if (isOwner(userId, photoId)) {
+        log.warn("User {} tried to like own photo {}", userId, photoId);
+        throw new AccessDeniedException("You don't have permission to like this photo");
+      }
+      log.info("User {} likes photo {}", userId, photoId);
+      PhotoResponse photoResponse = photoClient.likePhoto(userId, photoId);
+      return mapper.fromPhotoResponse(photoResponse, countryService.getCountryByCode(photoResponse.getCountryCode()));
+    }
+
+    if (!isOwner(userId, photoId)) {
+      log.warn("User {} tried to update someone else's photo {}", userId, photoId);
+      throw new AccessDeniedException("You don't have permission to update this photo");
+    }
+
+    log.info("User {} updates photo {}", userId, photoId);
+    PhotoResponse photoResponse = photoClient.updatePhoto(input);
+    return mapper.fromPhotoResponse(photoResponse, countryService.getCountryByCode(photoResponse.getCountryCode()));
   }
 
   public boolean deletePhoto(Jwt principal, UUID photoId) {
-    String username = principal.getClaim("sub");
-    UUID userId = userService.getUserId(username);
+    UUID userId = userService.getUserId(principal.getClaim("sub"));
     if (!isOwner(userId, photoId)) {
-      log.warn("User '{}' ({}) tried to delete someone else's photo '{}'", username, userId, photoId);
-      throw new SecurityException("You don't have permission to delete this photo");
+      log.warn("User {} tried to delete someone else's photo {}", userId, photoId);
+      throw new AccessDeniedException("You don't have permission to delete this photo");
     }
+    log.info("User {} deleted photo {}", userId, photoId);
     return photoClient.deletePhoto(photoId).getSuccess();
   }
 
