@@ -7,8 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -26,7 +25,7 @@ class EqualPasswordsValidatorTest {
         "qwerty"
     );
 
-    assertTrue(equalPasswordsValidator.isValid(rm, context));
+    assertThat(equalPasswordsValidator.isValid(rm, context)).isTrue();
   }
 
   @Test
@@ -46,6 +45,6 @@ class EqualPasswordsValidatorTest {
         "qwerty12345"
     );
 
-    assertFalse(equalPasswordsValidator.isValid(rm, context));
+    assertThat(equalPasswordsValidator.isValid(rm, context)).isFalse();
   }
 }

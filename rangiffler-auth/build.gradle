@@ -25,6 +25,7 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation "com.h2database:h2:${project.ext.h2Version}"
+    testImplementation "org.assertj:assertj-core:${project.ext.assertJVersion}"
 }
 
 jib {

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.AdditionalMatchers.not;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.lenient;
@@ -66,35 +66,25 @@ class RangifflerUserDetailsServiceTest {
         .map(a -> new SimpleGrantedAuthority(a.getAuthority().name()))
         .toList();
 
-    assertEquals(
-        "correct",
-        correct.getUsername()
-    );
-    assertEquals(
-        "test-pass",
-        correct.getPassword()
-    );
-    assertEquals(
-        expectedAuthorities,
-        correct.getAuthorities()
-    );
+    assertThat(correct.getUsername()).isEqualTo("correct");
+    assertThat(correct.getPassword()).isEqualTo("test-pass");
+    assertThat(correct.getAuthorities()).isEqualTo(expectedAuthorities);
 
-    assertTrue(correct.isAccountNonExpired());
-    assertTrue(correct.isAccountNonLocked());
-    assertTrue(correct.isCredentialsNonExpired());
-    assertTrue(correct.isEnabled());
+    assertThat(correct.isAccountNonExpired()).isTrue();
+    assertThat(correct.isAccountNonLocked()).isTrue();
+    assertThat(correct.isCredentialsNonExpired()).isTrue();
+    assertThat(correct.isEnabled()).isTrue();
   }
 
   @Test
   void loadUserByUsernameNegative() {
-    final UsernameNotFoundException exception = assertThrows(
-        UsernameNotFoundException.class,
-        () -> rangifflerUserDetailsService.loadUserByUsername("incorrect")
+   UsernameNotFoundException exception = org.assertj.core.api.Assertions.catchThrowableOfType(
+        () -> rangifflerUserDetailsService.loadUserByUsername("incorrect"),
+        UsernameNotFoundException.class
     );
 
-    assertEquals(
-        "Username: `incorrect` not found",
-        exception.getMessage()
-    );
+    org.assertj.core.api.Assertions.assertThat(exception)
+        .isNotNull()
+        .hasMessage("Username: `incorrect` not found");
   }
 }

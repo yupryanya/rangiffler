@@ -1,6 +1,5 @@
 package guru.qa.rangiffler.service.cors;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -11,8 +10,7 @@ import org.springframework.security.config.annotation.web.configurers.CorsConfig
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import java.util.List;
-
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -36,19 +34,10 @@ class CorsCustomizerTest {
     CorsConfigurationSource configurationSource = corsCustomizer.corsConfigurationSource();
     final CorsConfiguration configuration = configurationSource.getCorsConfiguration(null);
 
-    Assertions.assertTrue(configuration.getAllowCredentials());
-    Assertions.assertEquals(
-        List.of("front-uri", "auth-uri"),
-        configuration.getAllowedOrigins()
-    );
-    Assertions.assertEquals(
-        List.of("*"),
-        configuration.getAllowedHeaders()
-    );
-    Assertions.assertEquals(
-        List.of("*"),
-        configuration.getAllowedMethods()
-    );
+    assertThat(configuration.getAllowCredentials()).isTrue();
+    assertThat(configuration.getAllowedOrigins()).containsExactly("front-uri", "auth-uri");
+    assertThat(configuration.getAllowedHeaders()).containsExactly("*");
+    assertThat(configuration.getAllowedMethods()).containsExactly("*");
   }
 
   @Test
