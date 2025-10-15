@@ -43,7 +43,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testImplementation "com.h2database:h2:${project.ext.h2Version}"
-    testImplementation 'org.assertj:assertj-core:3.27.6'
+    testImplementation "org.assertj:assertj-core:${project.ext.assertJVersion}"
 }
 
 tasks.named('test') {
