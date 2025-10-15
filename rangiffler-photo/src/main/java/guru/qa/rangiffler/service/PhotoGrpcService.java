@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -30,6 +31,21 @@ public class PhotoGrpcService extends PhotoServiceGrpc.PhotoServiceImplBase {
     this.photoRepository = photoRepository;
     this.photoMapper = photoMapper;
     this.imageResizer = imageResizer;
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public void getPhoto(PhotoId request, StreamObserver<PhotoResponse> responseObserver) {
+    if (request.getId().isBlank()) {
+      throw new IllegalArgumentException("Photo id is required");
+    }
+
+    UUID photoId = UUID.fromString(request.getId());
+    PhotoEntity photo = photoRepository.findById(photoId)
+        .orElseThrow(() -> new PhotoNotFoundException("Photo not found: " + photoId));
+
+    responseObserver.onNext(photoMapper.toResponse(photo));
+    responseObserver.onCompleted();
   }
 
   @Override
@@ -152,10 +168,13 @@ public class PhotoGrpcService extends PhotoServiceGrpc.PhotoServiceImplBase {
     PhotoEntity photo = photoRepository.findById(photoId)
         .orElseThrow(() -> new PhotoNotFoundException("Photo not found: " + photoId));
 
-     if (!photo.getLikedUserIds().contains(userId)) {
-      photo.getLikedUserIds().add(userId);
-      photoRepository.save(photo);
+    Set<UUID> likedUsers = photo.getLikedUserIds();
+    if (likedUsers.contains(userId)) {
+      likedUsers.remove(userId);
+    } else {
+      likedUsers.add(userId);
     }
+    photoRepository.save(photo);
 
     responseObserver.onNext(photoMapper.toResponse(photo));
     responseObserver.onCompleted();

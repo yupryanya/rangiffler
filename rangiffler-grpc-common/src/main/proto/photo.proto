@@ -10,6 +10,7 @@ option java_package = "guru.qa.rangiffler";
 option java_outer_classname = "PhotoProto";
 
 service PhotoService {
+  rpc GetPhoto(PhotoId) returns (PhotoResponse);
   rpc AddPhoto(PhotoRequest) returns (PhotoResponse);
   rpc UpdatePhoto(UpdatePhotoRequest) returns (PhotoResponse);
   rpc DeletePhoto(DeletePhotoRequest) returns (DeletePhotoResponse);
@@ -17,6 +18,10 @@ service PhotoService {
 
   rpc GetUsersPhotos(UsersPhotoRequest) returns (PhotoListResponse);
   rpc GetUsersStatistics(UsersStatRequest) returns (StatsResponse);
+}
+
+message PhotoId {
+  string id = 1;
 }
 
 message PhotoRequest {

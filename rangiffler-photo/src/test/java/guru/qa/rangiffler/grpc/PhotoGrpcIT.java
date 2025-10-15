@@ -2,6 +2,7 @@ package guru.qa.rangiffler.grpc;
 
 import guru.qa.rangiffler.*;
 import guru.qa.rangiffler.grpc.config.GrpcTestStubsConfig;
+import io.grpc.StatusRuntimeException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -197,7 +198,7 @@ public class PhotoGrpcIT {
         .build();
 
     assertThatThrownBy(() -> photoServiceStub.addPhoto(request))
-        .isInstanceOf(io.grpc.StatusRuntimeException.class)
+        .isInstanceOf(StatusRuntimeException.class)
         .hasMessageContaining("INVALID_ARGUMENT");
   }
 
@@ -210,7 +211,7 @@ public class PhotoGrpcIT {
         .build();
 
     assertThatThrownBy(() -> photoServiceStub.addPhoto(request))
-        .isInstanceOf(io.grpc.StatusRuntimeException.class)
+        .isInstanceOf(StatusRuntimeException.class)
         .hasMessageContaining("INVALID_ARGUMENT");
   }
 
@@ -223,7 +224,34 @@ public class PhotoGrpcIT {
         .build();
 
     assertThatThrownBy(() -> photoServiceStub.updatePhoto(updateRequest))
-        .isInstanceOf(io.grpc.StatusRuntimeException.class)
+        .isInstanceOf(StatusRuntimeException.class)
+        .hasMessageContaining("NOT_FOUND");
+  }
+
+  @Sql(scripts = "/existingPhotosData.sql")
+  @Test
+  void shouldGetPhotoById() {
+    PhotoId request = PhotoId.newBuilder()
+        .setId(defaultPhotoId)
+        .build();
+
+    PhotoResponse response = photoServiceStub.getPhoto(request);
+
+    assertThat(response.getId()).isEqualTo(defaultPhotoId);
+    assertThat(response.getUserId()).isEqualTo(defaultUserId);
+    assertThat(response.getCountryCode()).isEqualTo(defaultCountry);
+    assertThat(response.getDescription()).isEqualTo(defaultDescription);
+    assertThat(response.getPhoto()).isEqualTo(defaultImage);
+  }
+
+  @Test
+  void shouldThrowWhenPhotoNotFound() {
+    PhotoId request = PhotoId.newBuilder()
+        .setId("99999999-9999-9999-9999-999999999999")
+        .build();
+
+    assertThatThrownBy(() -> photoServiceStub.getPhoto(request))
+        .isInstanceOf(StatusRuntimeException.class)
         .hasMessageContaining("NOT_FOUND");
   }
 }
