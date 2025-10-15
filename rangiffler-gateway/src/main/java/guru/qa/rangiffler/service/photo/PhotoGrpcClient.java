@@ -20,6 +20,18 @@ class PhotoGrpcClient {
     this.stub = stub;
   }
 
+  public PhotoResponse getPhoto(UUID photoId) {
+    try {
+      PhotoId request = PhotoId.newBuilder()
+          .setId(photoId.toString())
+          .build();
+      return stub.getPhoto(request);
+    } catch (StatusRuntimeException e) {
+      log.error("gRPC error getPhoto", e);
+      throw new RuntimeException("The gRPC operation was cancelled", e);
+    }
+  }
+
   public PhotoListResponse getUserPhotos(List<UUID> userIds, int page, int size) {
     try {
       UsersPhotoRequest request = UsersPhotoRequest.newBuilder()

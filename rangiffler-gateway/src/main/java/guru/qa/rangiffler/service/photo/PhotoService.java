@@ -63,12 +63,21 @@ public class PhotoService {
       if (photoIdStr == null) {
         throw new IllegalArgumentException("Photo ID must be provided for like action");
       }
-
       final UUID photoId = UUID.fromString(photoIdStr);
+      if (isOwner(userId, photoId)) {
+        log.warn("User '{}' ({}) tried to like own photo '{}'", username, userId, photoId);
+        throw new SecurityException("You don't have permission to like this photo");
+      }
       log.info("User '{}' ({}) likes photo '{}'", username, userId, photoId);
       photoResponse = photoClient.likePhoto(userId, photoId);
 
     } else if (photoIdStr != null) {
+      final UUID photoId = UUID.fromString(photoIdStr);
+      if (!isOwner(userId, photoId)) {
+        log.warn("User '{}' ({}) tried to edit someone else's photo '{}'", username, userId, photoId);
+        throw new SecurityException("You don't have permission to modify this photo");
+      }
+
       log.info("User '{}' ({}) updates photo '{}'", username, userId, photoIdStr);
       photoResponse = photoClient.updatePhoto(input);
 
@@ -84,7 +93,10 @@ public class PhotoService {
   public boolean deletePhoto(Jwt principal, UUID photoId) {
     String username = principal.getClaim("sub");
     UUID userId = userService.getUserId(username);
-
+    if (!isOwner(userId, photoId)) {
+      log.warn("User '{}' ({}) tried to delete someone else's photo '{}'", username, userId, photoId);
+      throw new SecurityException("You don't have permission to delete this photo");
+    }
     return photoClient.deletePhoto(photoId).getSuccess();
   }
 
@@ -93,5 +105,10 @@ public class PhotoService {
     return response.getStatsList().stream()
         .map(stat -> new StatGql(stat.getCount(), countryService.getCountryByCode(stat.getCountryCode())))
         .toList();
+  }
+
+  private boolean isOwner(@Nonnull UUID userId, @Nonnull UUID photoId) {
+    PhotoResponse photo = photoClient.getPhoto(photoId);
+    return photo.getUserId().equals(userId.toString());
   }
 }
