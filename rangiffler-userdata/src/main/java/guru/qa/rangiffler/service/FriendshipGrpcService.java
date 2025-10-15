@@ -18,8 +18,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
-
 @Slf4j
 @Service
 public class FriendshipGrpcService extends FriendshipServiceGrpc.FriendshipServiceImplBase {
