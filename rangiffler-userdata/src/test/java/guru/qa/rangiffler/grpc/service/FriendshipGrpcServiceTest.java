@@ -21,7 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -67,8 +67,8 @@ class FriendshipGrpcServiceTest {
         .setAction(FriendAction.ADD)
         .build();
 
-    assertThrows(SelfFriendshipException.class,
-        () -> service.updateFriendship(request, mockObserver));
+    assertThatThrownBy(() -> service.updateFriendship(request, mockObserver))
+        .isInstanceOf(SelfFriendshipException.class);
   }
 
   @Test
@@ -81,8 +81,8 @@ class FriendshipGrpcServiceTest {
         .setAction(FriendAction.ADD)
         .build();
 
-    assertThrows(UserNotFoundException.class,
-        () -> service.updateFriendship(request, mockObserver));
+    assertThatThrownBy(() -> service.updateFriendship(request, mockObserver))
+        .isInstanceOf(UserNotFoundException.class);
   }
 
   @Test
@@ -96,8 +96,8 @@ class FriendshipGrpcServiceTest {
         .setAction(FriendAction.ADD)
         .build();
 
-    assertThrows(UserNotFoundException.class,
-        () -> service.updateFriendship(request, mockObserver));
+    assertThatThrownBy(() -> service.updateFriendship(request, mockObserver))
+        .isInstanceOf(UserNotFoundException.class);
   }
 
   @Test
@@ -112,8 +112,8 @@ class FriendshipGrpcServiceTest {
         .setAction(FriendAction.ADD)
         .build();
 
-    assertThrows(IllegalStateException.class,
-        () -> service.updateFriendship(request, mockObserver));
+    assertThatThrownBy(() -> service.updateFriendship(request, mockObserver))
+        .isInstanceOf(IllegalStateException.class);
   }
 
   @Test
@@ -128,8 +128,8 @@ class FriendshipGrpcServiceTest {
         .setAction(FriendAction.ACCEPT)
         .build();
 
-    assertThrows(IllegalStateException.class,
-        () -> service.updateFriendship(request, mockObserver));
+    assertThatThrownBy(() -> service.updateFriendship(request, mockObserver))
+        .isInstanceOf(IllegalStateException.class);
   }
 
   @Test
@@ -144,8 +144,8 @@ class FriendshipGrpcServiceTest {
         .setAction(FriendAction.DELETE)
         .build();
 
-    assertThrows(IllegalStateException.class,
-        () -> service.updateFriendship(request, mockObserver));
+    assertThatThrownBy(() -> service.updateFriendship(request, mockObserver))
+        .isInstanceOf(IllegalStateException.class);
   }
 
   @Test
@@ -159,8 +159,8 @@ class FriendshipGrpcServiceTest {
         .setActionValue(999)
         .build();
 
-    assertThrows(UnsupportedOperationException.class,
-        () -> service.updateFriendship(request, mockObserver));
+    assertThatThrownBy(() -> service.updateFriendship(request, mockObserver))
+        .isInstanceOf(UnsupportedOperationException.class);
   }
 
   @Test
@@ -176,7 +176,7 @@ class FriendshipGrpcServiceTest {
         .setAction(FriendAction.ACCEPT)
         .build();
 
-    assertThrows(IllegalStateException.class,
-        () -> service.updateFriendship(request, mockObserver));
+    assertThatThrownBy(() -> service.updateFriendship(request, mockObserver))
+        .isInstanceOf(IllegalStateException.class);
   }
 }

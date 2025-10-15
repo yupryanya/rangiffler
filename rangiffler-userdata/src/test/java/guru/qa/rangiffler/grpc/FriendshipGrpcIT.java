@@ -10,7 +10,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -31,8 +31,8 @@ class FriendshipGrpcIT {
 
     UpdateFriendshipResponse response = friendshipStub.updateFriendship(request);
 
-    assertEquals("bob", response.getAddresseeName());
-    assertEquals(FriendshipStatus.SENT_PENDING, response.getStatus());
+    assertThat(response.getAddresseeName()).isEqualTo("bob");
+    assertThat(response.getStatus()).isEqualTo(FriendshipStatus.SENT_PENDING);
   }
 
   @Sql(scripts = "/sendInvitationShouldWork.sql")
@@ -46,8 +46,8 @@ class FriendshipGrpcIT {
 
     UpdateFriendshipResponse response = friendshipStub.updateFriendship(request);
 
-    assertEquals("bob", response.getAddresseeName());
-    assertEquals(FriendshipStatus.SENT_PENDING, response.getStatus());
+    assertThat(response.getAddresseeName()).isEqualTo("bob");
+    assertThat(response.getStatus()).isEqualTo(FriendshipStatus.SENT_PENDING);
   }
 
   @Sql(scripts = "/acceptInvitationShouldWork.sql")
@@ -61,8 +61,8 @@ class FriendshipGrpcIT {
 
     UpdateFriendshipResponse response = friendshipStub.updateFriendship(request);
 
-    assertEquals("alice", response.getAddresseeName());
-    assertEquals(FriendshipStatus.FRIEND, response.getStatus());
+    assertThat(response.getAddresseeName()).isEqualTo("alice");
+    assertThat(response.getStatus()).isEqualTo(FriendshipStatus.FRIEND);
   }
 
   @Sql(scripts = "/declineInvitationShouldWork.sql")
@@ -76,7 +76,7 @@ class FriendshipGrpcIT {
 
     UpdateFriendshipResponse response = friendshipStub.updateFriendship(request);
 
-    assertEquals("alice", response.getAddresseeName());
-    assertEquals(FriendshipStatus.NONE, response.getStatus());
+    assertThat(response.getAddresseeName()).isEqualTo("alice");
+    assertThat(response.getStatus()).isEqualTo(FriendshipStatus.NONE);
   }
 }

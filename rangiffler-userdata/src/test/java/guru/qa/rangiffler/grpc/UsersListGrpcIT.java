@@ -13,7 +13,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -35,8 +35,8 @@ public class UsersListGrpcIT {
 
     ListUsersResponse response = friendshipStub.getUsers(request);
 
-    assertEquals(1, response.getUsersList().size());
-    assertEquals("anna", response.getUsersList().getFirst().getUsername());
+    assertThat(response.getUsersList()).hasSize(1);
+    assertThat(response.getUsersList().getFirst().getUsername()).isEqualTo("anna");
   }
 
   @Sql(scripts = "/userFriendsShouldBeReturned.sql")
@@ -51,8 +51,8 @@ public class UsersListGrpcIT {
 
     ListUsersResponse response = friendshipStub.getUsers(request);
 
-    assertEquals(1, response.getUsersList().size());
-    assertEquals("john", response.getUsersList().getFirst().getUsername());
+    assertThat(response.getUsersList()).hasSize(1);
+    assertThat(response.getUsersList().getFirst().getUsername()).isEqualTo("john");
   }
 
   @Sql(scripts = "/userFriendsShouldBeReturned.sql")
@@ -67,7 +67,7 @@ public class UsersListGrpcIT {
 
     ListUsersResponse response = friendshipStub.getUsers(request);
 
-    assertEquals(1, response.getUsersList().size());
-    assertEquals("bob", response.getUsersList().getFirst().getUsername());
+    assertThat(response.getUsersList()).hasSize(1);
+    assertThat(response.getUsersList().getFirst().getUsername()).isEqualTo("bob");
   }
 }
