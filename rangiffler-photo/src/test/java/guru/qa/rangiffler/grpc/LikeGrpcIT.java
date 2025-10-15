@@ -29,7 +29,7 @@ public class LikeGrpcIT {
   @Autowired
   PhotoServiceGrpc.PhotoServiceBlockingStub photoServiceStub;
 
-  @Sql(scripts = "/existingPhotosData.sql")
+  @Sql(scripts = "/likePhotosData.sql")
   @Test
   void shouldAddLikeToExistingPhoto() {
     LikePhotoRequest likeRequest = LikePhotoRequest.newBuilder()
@@ -91,7 +91,7 @@ public class LikeGrpcIT {
         .hasMessageContaining("INVALID_ARGUMENT");
   }
 
-  @Sql(scripts = "/existingPhotosData.sql")
+  @Sql(scripts = "/likePhotosData.sql")
   @Test
   void shouldFailToLikePhotoWithInvalidUserId() {
     LikePhotoRequest likeRequest = LikePhotoRequest.newBuilder()
@@ -107,7 +107,7 @@ public class LikeGrpcIT {
         .hasMessageContaining("INVALID_ARGUMENT");
   }
 
-  @Sql(scripts = "/existingPhotosData.sql")
+  @Sql(scripts = "/likePhotosData.sql")
   @Test
   void shouldFailToLikePhotoWithEmptyUserId() {
     LikePhotoRequest likeRequest = LikePhotoRequest.newBuilder()
