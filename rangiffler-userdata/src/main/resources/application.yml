@@ -27,9 +27,9 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true
-    open-in-view: false
     show-sql: false
     generate-ddl: true
+    open-in-view: false
 
   flyway:
     enabled: true
@@ -51,12 +51,22 @@ logging:
 spring:
   config:
     activate:
-      on-profile: local
+      on-profile: 'local'
   kafka:
     bootstrap-servers: 'localhost:9092'
   datasource:
-    url: jdbc:mysql://127.0.0.1:3309/rangiffler-userdata?serverTimezone=UTC&createDatabaseIfNotExist=true
+    url: 'jdbc:mysql://127.0.0.1:3309/rangiffler-userdata?createDatabaseIfNotExist=true'
     username: root
     password: secret
-    hikari:
-      schema: rangiffler-userdata
+
+---
+spring:
+  config:
+    activate:
+      on-profile: 'docker'
+  kafka:
+    bootstrap-servers: 'kafka:9092'
+  datasource:
+    url: 'jdbc:mysql://mysql-userdata:3306/rangiffler-userdata?createDatabaseIfNotExist=true'
+    username: root
+    password: secret

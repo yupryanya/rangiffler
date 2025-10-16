@@ -4,6 +4,26 @@ server:
 spring:
   application:
     name: rangiffler-gateway
+
+  graphql:
+    graphiql:
+      enabled: true
+
+logging:
+  file:
+    path: ./logs/rangiffler-gateway
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+    org.springframework.security.oauth2: INFO
+    org.springframework.boot.autoconfigure: INFO
+
+---
+spring:
+  config:
+    activate:
+      on-profile: 'local'
   grpc:
     client:
       channels:
@@ -20,21 +40,34 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: 'http://127.0.0.1:9000'
-  graphql:
-    graphiql:
-      enabled: true
-
-logging:
-  file:
-    path: ./logs/rangiffler-gateway
-  level:
-    root: INFO
-    org.springframework.web: INFO
-    org.springframework.security: INFO
-    org.springframework.security.oauth2: INFO
-    org.springframework.boot.autoconfigure: INFO
-
 rangiffler-front:
   base-uri: 'http://127.0.0.1:3001'
 rangiffler-gateway:
   base-uri: 'http://127.0.0.1:8090'
+
+---
+spring:
+  config:
+    activate:
+      on-profile: 'docker'
+  grpc:
+    client:
+      channels:
+        country:
+          address: country.rangiffler.dc:8092
+        photo:
+          address: photo.rangiffler.dc:8094
+        userdata:
+          address: userdata.rangiffler.dc:8096
+        friendship:
+          address: userdata.rangiffler.dc:8096
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: 'http://auth.rangiffler.dc:9000'
+
+rangiffler-front:
+  base-uri: 'http://frontend.rangiffler.dc'
+rangiffler-gateway:
+  base-uri: 'http://gateway.rangiffler.dc:8090'

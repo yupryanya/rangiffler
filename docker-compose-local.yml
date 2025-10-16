@@ -1,0 +1,82 @@
+services:
+  mysql-auth:
+    container_name: rangiffler-auth-db
+    image: mysql:8.0.33
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: rangiffler-auth
+      TZ: GMT+3
+    volumes:
+      - mysql_auth_data:/var/lib/mysql
+    command: [ "--default-authentication-plugin=mysql_native_password" ]
+
+  mysql-country:
+      container_name: rangiffler-country-db
+      image: mysql:8.0.33
+      ports:
+        - "3308:3306"
+      environment:
+        MYSQL_ROOT_PASSWORD: secret
+        MYSQL_DATABASE: rangiffler-country
+        TZ: GMT+3
+      volumes:
+        - mysql_country_data:/var/lib/mysql
+      command: [ "--default-authentication-plugin=mysql_native_password" ]
+
+  mysql-photo:
+    container_name: rangiffler-photo-db
+    image: mysql:8.0.33
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: rangiffler-photo
+      TZ: GMT+3
+    volumes:
+      - mysql_photo_data:/var/lib/mysql
+    command: [ "--default-authentication-plugin=mysql_native_password" ]
+
+  mysql-userdata:
+    container_name: rangiffler-userdata-db
+    image: mysql:8.0.33
+    ports:
+      - "3309:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: rangiffler-userdata
+      TZ: GMT+3
+    volumes:
+      - mysql_userdata_data:/var/lib/mysql
+    command: [ "--default-authentication-plugin=mysql_native_password" ]
+
+  zookeeper:
+    container_name: zookeeper
+    image: confluentinc/cp-zookeeper:7.3.2
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+
+  kafka:
+    container_name: kafka
+    image: confluentinc/cp-kafka:7.3.2
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+
+volumes:
+  mysql_auth_data:
+  mysql_country_data:
+  mysql_photo_data:
+  mysql_userdata_data:

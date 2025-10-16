@@ -1,5 +1,5 @@
 create table users (
-    id           binary(16) not null primary key default (uuid_to_bin(uuid(), true)),
+    id           binary(16) not null primary key,
     username     varchar(50) not null unique,
     firstname    varchar(100),
     surname      varchar(100),
@@ -10,7 +10,7 @@ create table users (
 );
 
 create table friendship (
-    id        binary(16) not null primary key default (uuid_to_bin(uuid(), true)),
+    id        binary(16) not null primary key,
     user_id   binary(16) not null,
     friend_id binary(16) not null,
     state     enum('NONE', 'SENT_PENDING', 'RECEIVED_PENDING', 'FRIEND') not null,

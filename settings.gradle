@@ -1,3 +1,8 @@
 rootProject.name = 'rangiffler'
 include 'rangiffler-gateway'
 include 'rangiffler-auth'
+include 'rangiffler-country'
+include 'rangiffler-photo'
+include 'rangiffler-grpc-common'
+include 'rangiffler-userdata'
+include 'rangiffler-e-2-e-tests'

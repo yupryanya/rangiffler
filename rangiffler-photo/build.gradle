@@ -2,10 +2,11 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.5'
     id 'io.spring.dependency-management' version '1.1.7'
+    id 'com.google.cloud.tools.jib' version '3.4.1'
 }
 
 group = 'guru.qa'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 
 java {
     toolchain {
@@ -45,6 +46,44 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testImplementation "com.h2database:h2:${project.ext.h2Version}"
     testImplementation "org.assertj:assertj-core:${project.ext.assertJVersion}"
+}
+
+
+jib {
+    container {
+        ports = ['8093', '8094']
+        jvmFlags = ["-Dspring.profiles.active=${System.env.PROFILE}"]
+        environment = [
+                'TZ'         : 'Europe/Moscow'
+        ]
+        creationTime = 'USE_CURRENT_TIMESTAMP'
+        labels = [
+                'maintainer': 'Yulia Azovtseva @yupryanya',
+                'version'   : "${project.version}".toString()
+        ]
+    }
+    from {
+        image = "${project.ext.dockerImage}"
+        platforms {
+            platform {
+                architecture = "${project.ext.dockerArch}"
+                os = 'linux'
+            }
+        }
+    }
+    to {
+        image = "${project.ext.dockerHubName}/${project.name}-${System.env.PROFILE}"
+        tags = ['latest', "${project.version}"]
+    }
+}
+
+tasks.jib.dependsOn test
+tasks.jibDockerBuild.dependsOn test
+
+tasks.register('printVersion') {
+    doLast {
+        println project.version
+    }
 }
 
 tasks.named('test') {

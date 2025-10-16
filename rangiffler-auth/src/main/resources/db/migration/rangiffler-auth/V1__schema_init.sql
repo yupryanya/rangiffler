@@ -1,6 +1,6 @@
 create table if not exists `user`
 (
-    id                      binary(16) unique  not null default (UUID_TO_BIN(UUID(), true)),
+    id                      binary(16) unique  not null,
     username                varchar(50) unique not null,
     password                varchar(255)       not null,
     enabled                 boolean            not null,
@@ -12,7 +12,7 @@ create table if not exists `user`
 
 create table if not exists `authority`
 (
-    id        binary(16) unique      not null default (UUID_TO_BIN(UUID(), true)),
+    id        binary(16) unique      not null,
     user_id   binary(16)             not null,
     authority enum ('read', 'write') not null,
     primary key (id),

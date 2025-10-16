@@ -51,11 +51,20 @@ logging:
 spring:
   config:
     activate:
-      on-profile: local
+      on-profile: 'local'
 
   datasource:
-    url: jdbc:mysql://127.0.0.1:3307/rangiffler-photo?serverTimezone=UTC&createDatabaseIfNotExist=true
+    url: 'jdbc:mysql://127.0.0.1:3307/rangiffler-photo?createDatabaseIfNotExist=true'
     username: root
     password: secret
-    hikari:
-      schema: rangiffler-photo
+
+---
+spring:
+  config:
+    activate:
+      on-profile: 'docker'
+
+  datasource:
+    url: 'jdbc:mysql://mysql-photo:3306/rangiffler-photo?createDatabaseIfNotExist=true'
+    username: root
+    password: secret

@@ -27,10 +27,9 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true
-    open-in-view: false
     show-sql: false
     generate-ddl: true
-
+    open-in-view: false
   flyway:
     enabled: true
     baseline-on-migrate: true
@@ -51,11 +50,28 @@ logging:
 spring:
   config:
     activate:
-      on-profile: local
-
+      on-profile: 'local'
+  autoconfigure:
+    exclude:
+      - 'org.springframework.cloud.vault.config.VaultAutoConfiguration'
+      - 'org.springframework.cloud.vault.config.VaultObservationAutoConfiguration'
+      - 'org.springframework.cloud.vault.config.VaultReactiveAutoConfiguration'
   datasource:
-    url: jdbc:mysql://127.0.0.1:3308/rangiffler-country?serverTimezone=UTC&createDatabaseIfNotExist=true
+    url: 'jdbc:mysql://127.0.0.1:3308/rangiffler-country?createDatabaseIfNotExist=true'
     username: root
     password: secret
-    hikari:
-      schema: rangiffler-country
+
+---
+spring:
+  config:
+    activate:
+      on-profile: 'docker'
+  autoconfigure:
+    exclude:
+      - 'org.springframework.cloud.vault.config.VaultAutoConfiguration'
+      - 'org.springframework.cloud.vault.config.VaultObservationAutoConfiguration'
+      - 'org.springframework.cloud.vault.config.VaultReactiveAutoConfiguration'
+  datasource:
+    url: 'jdbc:mysql://mysql-country:3306/rangiffler-country?createDatabaseIfNotExist=true'
+    username: root
+    password: secret

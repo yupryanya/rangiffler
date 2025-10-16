@@ -7,7 +7,6 @@ spring:
   mvc:
     log-request-details: true
   datasource:
-    url: 'jdbc:mysql://127.0.0.1:3306/rangiffler-auth?serverTimezone=UTC&createDatabaseIfNotExist=true'
     hikari:
       connection-timeout: 20000
       minimum-idle: 10
@@ -15,8 +14,6 @@ spring:
       idle-timeout: 10000
       max-lifetime: 1000
       auto-commit: true
-    username: root
-    password: secret
   flyway:
     enabled: true
     baseline-on-migrate: true
@@ -44,9 +41,48 @@ logging:
     org.springframework.boot.autoconfigure: DEBUG
     org.flywaydb: DEBUG
 
+---
+spring:
+  config:
+    activate:
+      on-profile: 'local'
+  autoconfigure:
+    exclude:
+      - 'org.springframework.cloud.vault.config.VaultAutoConfiguration'
+      - 'org.springframework.cloud.vault.config.VaultObservationAutoConfiguration'
+      - 'org.springframework.cloud.vault.config.VaultReactiveAutoConfiguration'
+  kafka:
+    bootstrap-servers: 'localhost:9092'
+  datasource:
+    url: 'jdbc:mysql://127.0.0.1:3306/rangiffler-auth?createDatabaseIfNotExist=true'
+    username: root
+    password: secret
 rangiffler-front:
   base-uri: 'http://127.0.0.1:3001'
 rangiffler-auth:
   base-uri: 'http://127.0.0.1:9000'
+oauth2:
+  client-id: 'client'
+
+---
+spring:
+  config:
+    activate:
+      on-profile: 'docker'
+  autoconfigure:
+    exclude:
+      - 'org.springframework.cloud.vault.config.VaultAutoConfiguration'
+      - 'org.springframework.cloud.vault.config.VaultObservationAutoConfiguration'
+      - 'org.springframework.cloud.vault.config.VaultReactiveAutoConfiguration'
+  kafka:
+    bootstrap-servers: 'kafka:9092'
+  datasource:
+    url: 'jdbc:mysql://mysql-auth:3306/rangiffler-auth?createDatabaseIfNotExist=true'
+    username: root
+    password: secret
+rangiffler-front:
+  base-uri: 'http://frontend.rangiffler.dc'
+rangiffler-auth:
+  base-uri: 'http://auth.rangiffler.dc:9000'
 oauth2:
   client-id: 'client'
