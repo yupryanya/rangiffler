@@ -86,7 +86,7 @@ public class RangifflerAuthServiceConfig {
     }
 
     http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
-        .oidc(Customizer.withDefaults());    // Enable OpenID Connect 1.0
+        .oidc(Customizer.withDefaults());
 
     http.exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(entryPoint))
         .oauth2ResourceServer(rs -> rs.jwt(Customizer.withDefaults()));
@@ -121,24 +121,23 @@ public class RangifflerAuthServiceConfig {
 
   @Bean
   public RegisteredClientRepository registeredClientRepository() {
-    RegisteredClient publicClient = RegisteredClient.withId(UUID.randomUUID().toString())
+    RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
         .clientId(clientId)
         .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
         .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+        .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
         .redirectUri(rangifflerFrontUri + "/authorized")
         .scope(OidcScopes.OPENID)
         .scope(OidcScopes.PROFILE)
         .clientSettings(ClientSettings.builder()
-            .requireAuthorizationConsent(true)
-            .requireProofKey(true)
-            .build()
-        )
+            .requireAuthorizationConsent(true).build())
         .tokenSettings(TokenSettings.builder()
-            .accessTokenTimeToLive(Duration.of(2, ChronoUnit.HOURS))
+            .accessTokenTimeToLive(Duration.ofHours(1))
+            .refreshTokenTimeToLive(Duration.ofHours(10))
             .build())
         .build();
 
-    return new InMemoryRegisteredClientRepository(publicClient);
+    return new InMemoryRegisteredClientRepository(registeredClient);
   }
 
   @Bean
