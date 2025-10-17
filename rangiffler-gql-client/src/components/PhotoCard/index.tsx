@@ -30,10 +30,20 @@ export const PhotoCard: FC<PhotoCardInterface> = ({photo, onEditClick, withFrien
         withFriends,
     });
 
-    const {likePhoto} = useLikePhoto({
-        onError: () => snackbar.showSnackBar("Post was not liked", "error"),
-        onCompleted: () => snackbar.showSnackBar("Post was succesfully liked", "success"),
-    });
+   const { likePhoto } = useLikePhoto({
+     onError: (error) => {
+       if (error?.message?.includes("Unauthorized")) {
+         snackbar.showSnackBar(
+           "You are probably trying to like your own photo. Only friends' photos can be liked.",
+           "error"
+         );
+       } else {
+         snackbar.showSnackBar("Post was not liked", "error");
+       }
+     },
+     onCompleted: () =>
+       snackbar.showSnackBar("Post was successfully liked", "success"),
+   });
 
     const handleDeletePhoto = () => {
         deletePhoto({
