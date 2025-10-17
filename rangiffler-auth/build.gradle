@@ -34,7 +34,7 @@ jib {
         ports = ['9000']
         jvmFlags = ["-Dspring.profiles.active=${System.env.PROFILE}"]
         environment = [
-                'TZ'         : 'Europe/Moscow'
+                'TZ'         : 'UTC+4'
         ]
         creationTime = 'USE_CURRENT_TIMESTAMP'
         labels = [

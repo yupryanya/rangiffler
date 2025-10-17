@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: rangiffler-userdata
+    name: rangiffler-photo
 
   grpc:
     server:

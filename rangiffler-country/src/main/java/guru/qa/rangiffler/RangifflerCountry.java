@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CountryApplication {
+public class RangifflerCountry {
 
   public static void main(String[] args) {
-    SpringApplication.run(CountryApplication.class, args);
+    SpringApplication.run(RangifflerCountry.class, args);
   }
 }
