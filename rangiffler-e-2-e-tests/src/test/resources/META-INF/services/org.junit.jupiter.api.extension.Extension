@@ -1,0 +1,6 @@
+guru.qa.rangiffler.jupiter.extension.CookiesExtension
+guru.qa.rangiffler.jupiter.extension.DatabasesExtension
+guru.qa.rangiffler.jupiter.extension.KafkaExtension
+guru.qa.rangiffler.jupiter.extension.TestMethodContextExtension
+guru.qa.rangiffler.jupiter.extension.AllureBackendLogsExtension
+guru.qa.rangiffler.jupiter.extension.AllureDockerServiceExtension

@@ -1,0 +1,17 @@
+mutation CreateOrUpdatePhoto($input: PhotoInput!) {
+    photo(input: $input) {
+        id
+        src
+        description
+        country {
+            code
+            name
+            flag
+        }
+        creationDate
+    }
+}
+
+mutation DeletePhoto($id: ID!) {
+    deletePhoto(id: $id)
+}

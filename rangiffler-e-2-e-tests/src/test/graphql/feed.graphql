@@ -1,0 +1,43 @@
+query Feed($withFriends: Boolean!, $page: Int, $size: Int) {
+    feed(withFriends: $withFriends) {
+        username
+        withFriends
+        photos(page: $page, size: $size) {
+            edges {
+                node {
+                    id
+                    src
+                    country {
+                        code
+                        name
+                        flag
+                    }
+                    description
+                    creationDate
+                    likes {
+                        total
+                        likes {
+                            user
+                            username
+                            creationDate
+                        }
+                    }
+                }
+            }
+            pageInfo {
+                hasPreviousPage
+                hasNextPage
+                startCursor
+                endCursor
+            }
+        }
+        stat {
+            count
+            country {
+                code
+                name
+                flag
+            }
+        }
+    }
+}

@@ -1,0 +1,12 @@
+mutation LikePhoto($input: PhotoInput!) {
+    photo(input: $input) {
+        id
+        description
+        likes {
+            total
+            likes {
+                user
+            }
+        }
+    }
+}

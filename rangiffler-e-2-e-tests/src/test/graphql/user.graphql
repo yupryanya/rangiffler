@@ -1,0 +1,55 @@
+query CurrentUser {
+    user {
+        id
+        username
+        firstname
+        surname
+        avatar
+        friendStatus
+        location {
+            code
+            name
+            flag
+        }
+    }
+}
+
+query Users($page: Int, $size: Int, $searchQuery: String) {
+    users(page: $page, size: $size, searchQuery: $searchQuery) {
+        edges {
+            node {
+                id
+                username
+                firstname
+                surname
+                avatar
+                friendStatus
+                location {
+                    code
+                    name
+                }
+            }
+        }
+        pageInfo {
+            hasPreviousPage
+            hasNextPage
+            startCursor
+            endCursor
+        }
+    }
+}
+
+mutation UpdateUser($input: UserInput!) {
+    user(input: $input) {
+        id
+        username
+        firstname
+        surname
+        avatar
+        location {
+            code
+            name
+            flag
+        }
+    }
+}

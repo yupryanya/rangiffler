@@ -1,0 +1,64 @@
+query Friends($page: Int, $size: Int, $searchQuery: String) {
+    user {
+        friends(page: $page, size: $size, searchQuery: $searchQuery) {
+            edges {
+                node {
+                    id
+                    username
+                    firstname
+                    surname
+                    avatar
+                    friendStatus
+                    location {
+                        code
+                        name
+                    }
+                }
+            }
+            pageInfo {
+                hasPreviousPage
+                hasNextPage
+                startCursor
+                endCursor
+            }
+        }
+    }
+}
+
+query IncomeInvitations($page: Int, $size: Int) {
+    user {
+        incomeInvitations(page: $page, size: $size) {
+            edges {
+                node {
+                    id
+                    username
+                    firstname
+                    surname
+                }
+            }
+            pageInfo {
+                hasPreviousPage
+                hasNextPage
+            }
+        }
+    }
+}
+
+query OutcomeInvitations($page: Int, $size: Int) {
+    user {
+        outcomeInvitations(page: $page, size: $size) {
+            edges {
+                node {
+                    id
+                    username
+                    firstname
+                    surname
+                }
+            }
+            pageInfo {
+                hasPreviousPage
+                hasNextPage
+            }
+        }
+    }
+}
