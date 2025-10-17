@@ -1,5 +1,5 @@
 <p>
-<img width="10%" title="Rangiffler" src="media/images/rangiffler.png" >
+<img width="10%" title="Rangiffler" src="media/images/rangiffler-logo.png" >
 </p>
 
 ## Contents
@@ -63,11 +63,15 @@ It was designed as a microservices-based web application “Rangiffler” - a si
 
 ## Rangiffler Microservices Overview
 
+<p>
+<img width="50%" title="Rangiffler-services" src="media/images/rangiffler-services.jpeg" >
+</p>
+
 | **Service**  | **Port(s)** | **Communication**         | **Storage** | **Responsibility**                                                     | **Testing**            |
 |--------------|-------------|---------------------------|-------------|------------------------------------------------------------------------|------------------------|
 | **FRONTEND** | 80          | GraphQL to Gateway	       | -           | Client-side UI, browse content, share photos, interact with friends    | Test Framework (e2e)   |
 | **GATEWAY**  | 8090        | GraphQL API, gRPC clients | -           | Main entry point, routes requests to microservices, JWT access control | Test Framework (e2e)   |
-| **AUTH**     | 9000        | REST, Kafka producer      | MySQL       | User authentication, credential storage, Kafka events                  | Unit tests             |
+| **AUTH**     | 9000        | Web MVC, Kafka producer   | MySQL       | User authentication, credential storage, Kafka events                  | Unit tests             |
 | **COUNTRY**  | 8091 / 8092 | gRPC                      | MySQL       | Countries data                                                         | Integration tests      |
 | **PHOTO**    | 8093 / 8094 | gRPC                      | MySQL       | User photos, reactions (likes)                                         | Integration tests      |
 | **USERDATA** | 8095 / 8096 | gRPC, Kafka consumer      | MySQL       | User info and friend lists                                             | Integration/Unit tests |
@@ -117,7 +121,7 @@ From the project root, run the script:
 The script will automatically:
 
 - Stop and remove old containers if they exist
-- Start all required infrastructure: databases, Kafka and Zookeeper
+- Start all required infrastructure: MySQL databases, Kafka and Zookeeper
 
 > :information_source: DB data will be stored locally in Docker volumes, so it **persists between container restarts**.
 
@@ -128,6 +132,10 @@ The script will automatically:
 Start **rangiffler-auth**:
 ```
 ./gradlew :rangiffler-auth:bootRun --args="--spring.profiles.active=local"
+```
+Start **rangiffler-country**:
+```
+./gradlew :rangiffler-country:bootRun --args="--spring.profiles.active=local"
 ```
 Start **rangiffler-photo**
 ```
@@ -174,7 +182,7 @@ Now you can run tests **directly from your IDE**
 1. **Login to a Docker Hub account.** 
    If you don't have one already, sign up for a free account at [Docker Hub](https://hub.docker.com/)
 
-2. **Add aliases to your hosts file.** This allows your browser and services to resolve local domain names to the correct containers 
+2. **Add aliases to your hosts file.** to resolve local domain names to the correct containers 
   
    Edit the `etc/hosts` file with administrator/root rights to add the following entries:
 
