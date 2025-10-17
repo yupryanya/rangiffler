@@ -11,6 +11,6 @@ FROM nginx:1.27.1-alpine AS release
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /usr/share/nginx/html/
 LABEL version=${VERSION}
-ENV TZ=Europe/Moscow
+ENV TZ=UTC+4
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

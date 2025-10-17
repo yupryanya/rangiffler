@@ -31,7 +31,7 @@ public class UserDataKafkaListener {
             () -> {
               UserEntity newUser = new UserEntity();
               newUser.setUsername(user.username());
-              newUser.setCountryCode("ru");
+              newUser.setCountryCode("ge");
               UserEntity savedUser = userDataRepository.save(newUser);
 
               log.info("### User '{}' successfully saved with id: {}",

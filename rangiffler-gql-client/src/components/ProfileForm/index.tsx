@@ -35,7 +35,7 @@ export const ProfileForm = () => {
         firstname: {...formInitialState.firstname, value: user?.firstname ?? ""},
         surname: {...formInitialState.surname, value: user?.surname ?? ""},
         username: {...formInitialState.username, value: user?.username ?? ""},
-        location: {...formInitialState.location, value: user?.location.code ?? "ru"},
+        location: {...formInitialState.location, value: user?.location.code ?? "ge"},
         avatar: {...formInitialState.avatar, value: user?.avatar ?? undefined}
     });
 

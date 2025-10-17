@@ -32,7 +32,7 @@ export const formInitialState: PhotoFormProps = {
         errorMessage: "",
     },
     country: {
-        value: "ru",
+        value: "ge",
         error: false,
         errorMessage: "",
     },

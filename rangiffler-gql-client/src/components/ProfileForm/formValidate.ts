@@ -22,7 +22,7 @@ export const formInitialState: UserFormProps = {
         errorMessage: "",
     },
     location: {
-        value: "ru",
+        value: "ge",
         error: false,
         errorMessage: "",
     },
