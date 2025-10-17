@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RangifflerGatewayApplication {
+public class RangifflerGateway {
 
   public static void main(String[] args) {
-    SpringApplication.run(RangifflerGatewayApplication.class, args);
+    SpringApplication.run(RangifflerGateway.class, args);
   }
 }
