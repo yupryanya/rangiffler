@@ -198,8 +198,7 @@ services:
       - rangiffler-network
 
   selenoid:
-    profiles:
-      - test
+    profiles: [ test ]
     container_name: selenoid
     image: aerokube/selenoid:1.11.3
     platform: linux/${ARCH}
@@ -208,7 +207,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./selenoid/browsers.json:/etc/selenoid/browsers.json
     environment:
-      - TZ=Europe/Moscow
+      - TZ=UTC+4
     restart: unless-stopped
     command: [ "-conf", "/etc/selenoid/browsers.json", "-limit", "3", "-video-output-dir", "/opt/selenoid/video", "-log-output-dir", "/opt/selenoid/logs", "-container-network", "rangiffler-master_rangiffler-network" ]
     ports:
@@ -217,8 +216,7 @@ services:
       - rangiffler-network
 
   selenoid-ui:
-    profiles:
-      - test
+    profiles: [ test ]
     container_name: selenoid-ui
     image: aerokube/selenoid-ui:1.10.11
     depends_on:

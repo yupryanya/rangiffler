@@ -26,7 +26,7 @@ subprojects {
         dockerHubName = "yupryanya"
 
         lombokVersion = '1.18.34'
-        springKafkaVersion = '3.3.2'
+        springKafkaVersion = '3.3.10'
         springVaultVersion = '4.2.0'
         springOpenApiVersion = '2.8.3'
         postgresDriverVersion = '42.7.3'
