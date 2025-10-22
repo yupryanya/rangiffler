@@ -43,15 +43,15 @@
                 <button class="form__submit" type="submit">
                     Sign Up
                 </button>
-                <p class="form__paragraph">Already have an account? <a class="form__link" th:href="@{/login}"
-                                                                       href="/login">Sign in!</a></p>
+                <p class="form__paragraph">Already have an account? <a class="form__link" th:href="@{|${frontUri}|}">Sign
+                    in!</a>
                 </p>
             </form>
             <div class="form" th:unless="${username == null}">
                 <p class="form__paragraph form__paragraph_success">Congratulations! You've registered!</p>
                 <p class="form__paragraph form__paragraph_link">
-                    <a class="form_sign-in" th:href="@{/login}"
-                       href="/login">Sign in!</a></p>
+                    <a class="form_sign-in" th:href="@{|${frontUri}|}">Sign in!</a>
+                </p>
             </div>
         </section>
     </div>
