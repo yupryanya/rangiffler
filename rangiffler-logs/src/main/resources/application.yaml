@@ -1,0 +1,44 @@
+server:
+  port: 8099
+
+spring:
+  application:
+    name: rangiffler-logs
+
+---
+spring:
+  config:
+    activate:
+      on-profile: 'local'
+  data:
+    mongodb:
+      uri: mongodb://root:secret@localhost:27018/rangiffler?authSource=admin
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: logs-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+---
+spring:
+  config:
+    activate:
+      on-profile: 'docker'
+  data:
+    mongodb:
+      uri: mongodb://root:secret@rangiffler-mongo:27017/rangiffler?authSource=admin
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: logs-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer

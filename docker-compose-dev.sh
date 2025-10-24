@@ -32,6 +32,7 @@ docker_images=(
   "$PREFIX/rangiffler-gateway-docker:latest"
   "$PREFIX/rangiffler-photo-docker:latest"
   "$PREFIX/rangiffler-userdata-docker:latest"
+  "$PREFIX/rangiffler-logs-docker:latest"
 )
 
 image_exists() {

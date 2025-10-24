@@ -52,19 +52,21 @@ spring:
   config:
     activate:
       on-profile: 'local'
-
   datasource:
     url: 'jdbc:mysql://127.0.0.1:3307/rangiffler-photo?createDatabaseIfNotExist=true'
     username: root
     password: secret
+  kafka:
+    bootstrap-servers: 'localhost:9092'
 
 ---
 spring:
   config:
     activate:
       on-profile: 'docker'
-
   datasource:
     url: 'jdbc:mysql://mysql-photo:3306/rangiffler-photo?createDatabaseIfNotExist=true'
     username: root
     password: secret
+  kafka:
+    bootstrap-servers: 'kafka:9092'

@@ -1,10 +1,18 @@
 plugins {
+    id 'java'
     id 'org.springframework.boot' version '3.5.5'
+    id 'io.spring.dependency-management' version '1.1.7'
     id 'com.google.cloud.tools.jib' version '3.4.1'
 }
 
-group = 'guru.qa'
-version = '0.0.1-SNAPSHOT'
+group = 'guru.qa.rangiffler'
+version = '1.0.0'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
 
 repositories {
     mavenCentral()
@@ -17,35 +25,20 @@ dependencyManagement {
 }
 
 dependencies {
-    implementation project(':rangiffler-grpc-common')
-    
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    implementation 'org.springframework.data:spring-data-commons'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-graphql'
-    implementation "com.tailrocks.graphql:graphql-datetime-spring-boot-starter:${project.ext.springGraphqlDateTimeVersion}"
-
-    implementation 'org.springframework.grpc:spring-grpc-spring-boot-starter'
-    implementation 'io.grpc:grpc-services'
-
-    implementation 'com.github.danielwegener:logback-kafka-appender:0.2.0-RC2'
-    implementation 'net.logstash.logback:logstash-logback-encoder:7.4'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation 'org.springframework.kafka:spring-kafka'
 
     annotationProcessor "org.projectlombok:lombok:${project.ext.lombokVersion}"
     compileOnly "org.projectlombok:lombok:${project.ext.lombokVersion}"
-
-    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${project.ext.springOpenApiVersion}"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 jib {
     container {
-        ports = ['8090']
+        ports = ['8099']
         jvmFlags = ["-Dspring.profiles.active=${System.env.PROFILE}"]
         environment = [
                 'TZ'         : 'UTC+4'
@@ -73,10 +66,6 @@ jib {
 
 tasks.jib.dependsOn test
 tasks.jibDockerBuild.dependsOn test
-
-tasks.named('bootJar') {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
 
 tasks.register('printVersion') {
     doLast {
