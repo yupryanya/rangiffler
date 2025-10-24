@@ -1,0 +1,35 @@
+<configuration>
+    <springProperty scope="context" name="activeProfile" source="spring.profiles.active"/>
+    <springProperty scope="context" name="app" source="spring.application.name"/>
+    <springProperty scope="context" name="kafkaServers" source="spring.kafka.bootstrap-servers"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="KAFKA" class="com.github.danielwegener.logback.kafka.KafkaAppender">
+        <topic>user-logs</topic>
+        <producerConfig>bootstrap.servers=${kafkaServers}</producerConfig>
+        <producerConfig>acks=0</producerConfig>
+        <producerConfig>linger.ms=100</producerConfig>
+        <producerConfig>request.timeout.ms=5000</producerConfig>
+        <producerConfig>delivery.timeout.ms=5100</producerConfig>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+    </appender>
+
+    <appender name="ASYNC_KAFKA" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="KAFKA"/>
+        <queueSize>10000</queueSize>
+        <neverBlock>true</neverBlock>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <logger name="guru.qa.rangiffler" level="INFO" additivity="false">
+        <appender-ref ref="ASYNC_KAFKA"/>
+    </logger>
+</configuration>

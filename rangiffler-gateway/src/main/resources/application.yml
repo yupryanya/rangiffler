@@ -40,6 +40,8 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: 'http://127.0.0.1:9000'
+  kafka:
+    bootstrap-servers: 'localhost:9092'
 rangiffler-front:
   base-uri: 'http://127.0.0.1:3001'
 rangiffler-gateway:
@@ -66,7 +68,8 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: 'http://auth.rangiffler.dc:9000'
-
+  kafka:
+    bootstrap-servers: 'kafka:9092'
 rangiffler-front:
   base-uri: 'http://frontend.rangiffler.dc'
 rangiffler-gateway:

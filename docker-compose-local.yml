@@ -51,6 +51,19 @@ services:
       - mysql_userdata_data:/var/lib/mysql
     command: [ "--default-authentication-plugin=mysql_native_password" ]
 
+  mongo:
+    container_name: rangiffler-mongo
+    image: mongo:7.0
+    ports:
+      - "27018:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: secret
+      MONGO_INITDB_DATABASE: rangiffler
+      TZ: GMT+4
+    volumes:
+      - mongo_data:/data/db
+
   zookeeper:
     container_name: zookeeper
     image: confluentinc/cp-zookeeper:7.3.2
@@ -80,3 +93,4 @@ volumes:
   mysql_country_data:
   mysql_photo_data:
   mysql_userdata_data:
+  mongo_data:
