@@ -75,6 +75,7 @@ It was designed as a microservices-based web application “Rangiffler” - a si
 | **COUNTRY**  | 8091 / 8092 | gRPC                      | MySQL       | Countries data                                                         | Integration tests      |
 | **PHOTO**    | 8093 / 8094 | gRPC                      | MySQL       | User photos, reactions (likes)                                         | Integration tests      |
 | **USERDATA** | 8095 / 8096 | gRPC, Kafka consumer      | MySQL       | User info and friend lists                                             | Integration/Unit tests |
+| **LOGS**     | 8099        | Kafka consumer            | Mongo DB    | Centralized log aggregation                                            | -                      |
 
 
 There are two ways to run the project:
