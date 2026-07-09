@@ -64,7 +64,7 @@ It was designed as a microservices-based web application “Rangiffler” - a si
 ## Rangiffler Microservices Overview
 
 <p>
-<img width="50%" title="Rangiffler-services" src="media/images/rangiffler-services.jpeg" >
+<img width="50%" title="Rangiffler-services" src="media/images/rangiffler-services.svg" >
 </p>
 
 | **Service**  | **Port(s)** | **Communication**         | **Storage** | **Responsibility**                                                     | **Testing**            |
